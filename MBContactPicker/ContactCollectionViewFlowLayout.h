@@ -14,6 +14,6 @@
 
 @end
 
-@interface MBContactCollectionViewFlowLayout : UICollectionViewFlowLayout
+@interface ContactCollectionViewFlowLayout : UICollectionViewFlowLayout
 
 @end

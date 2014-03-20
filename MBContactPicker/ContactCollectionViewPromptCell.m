@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Citrrus, LLC. All rights reserved.
 //
 
-#import "MBContactCollectionViewPromptCell.h"
+#import "ContactCollectionViewPromptCell.h"
 
-@interface MBContactCollectionViewPromptCell()
+@interface ContactCollectionViewPromptCell()
 
 @property (nonatomic, weak) UILabel *promptLabel;
 
 @end
 
-@implementation MBContactCollectionViewPromptCell
+@implementation ContactCollectionViewPromptCell
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {

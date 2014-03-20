@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Citrrus, LLC. All rights reserved.
 //
 
-#import "MBContactCollectionViewContactCell.h"
+#import "ContactCollectionViewContactCell.h"
 
-@interface MBContactCollectionViewContactCell()
+@interface ContactCollectionViewContactCell()
 
 @property (nonatomic, weak) UILabel *contactTitleLabel;
 
 @end
 
-@implementation MBContactCollectionViewContactCell
+@implementation ContactCollectionViewContactCell
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -41,12 +41,16 @@
 
 - (void)setup
 {
+    self.layer.cornerRadius = 3.0f;
+    self.layer.masksToBounds = YES;
     UILabel *contactLabel = [[UILabel alloc] initWithFrame:self.bounds];
     [self addSubview:contactLabel];
     contactLabel.textColor = [UIColor blueColor];
     contactLabel.textAlignment = NSTextAlignmentCenter;
     [contactLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.contactTitleLabel = contactLabel;
+    self.contactTitleLabel.layer.cornerRadius = 3.0f;
+    self.contactTitleLabel.layer.masksToBounds = YES;
 
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(2)-[contactLabel]-(2)-|"
                                                                  options:0
@@ -63,16 +67,16 @@
     self.focused = self.focused;
 }
 
-- (void)setModel:(id<MBContactPickerModelProtocol>)model
+- (void)configureForContact:(Contact*)aContact
 {
-    _model = model;
-    self.contactTitleLabel.text = self.model.contactTitle;
+    self.contact = aContact;
+    self.contactTitleLabel.text = [self.contact getFullName];
 }
 
-- (CGFloat)widthForCellWithContact:(id<MBContactPickerModelProtocol>)model
+- (CGFloat)widthForCellWithContact:(Contact*)aContact
 {
     UIFont *font = self.contactTitleLabel.font;
-    CGSize size = [model.contactTitle boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{ NSFontAttributeName: font } context:nil].size;
+    CGSize size = [[self.contact getFullName] boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{ NSFontAttributeName: font } context:nil].size;
     return ceilf(size.width) + 10;
 }
 
@@ -80,14 +84,11 @@
 {
     _focused = focused;
     
-    if (focused)
-    {
+    if (focused) {
         self.contactTitleLabel.textColor = [UIColor whiteColor];
         self.contactTitleLabel.backgroundColor = self.tintColor;
-        self.contactTitleLabel.layer.cornerRadius = 3.0f;
-    }
-    else
-    {
+        
+    } else {
         self.contactTitleLabel.textColor = self.tintColor;
         self.contactTitleLabel.backgroundColor = [UIColor clearColor];
     }

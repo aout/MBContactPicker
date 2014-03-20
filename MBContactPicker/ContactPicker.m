@@ -6,17 +6,18 @@
 //  Copyright (c) 2013 Citrrus, LLC. All rights reserved.
 //
 
-#import "MBContactPicker.h"
+#import "ContactPicker.h"
 
 CGFloat const kMaxVisibleRows = 2;
 NSString * const kMBPrompt = @"To:";
 CGFloat const kAnimationSpeed = .25;
 
-@interface MBContactPicker()
+@interface ContactPicker()
 
-@property (nonatomic, weak) MBContactCollectionView *contactCollectionView;
+@property (nonatomic, weak) ContactCollectionView *contactCollectionView;
 @property (nonatomic, weak) UITableView *searchTableView;
 @property (nonatomic) NSArray *filteredContacts;
+@property (nonatomic) NSMutableArray *selectedContacts;
 @property (nonatomic) NSArray *contacts;
 @property (nonatomic) CGFloat keyboardHeight;
 @property (nonatomic) CGSize contactCollectionViewContentSize;
@@ -28,7 +29,7 @@ CGFloat const kAnimationSpeed = .25;
 
 @end
 
-@implementation MBContactPicker
+@implementation ContactPicker
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -84,7 +85,9 @@ CGFloat const kAnimationSpeed = .25;
     self.clipsToBounds = YES;
     self.enabled = YES;
     
-    MBContactCollectionView *contactCollectionView = [MBContactCollectionView contactCollectionViewWithFrame:self.bounds];
+    self.selectedContacts = [NSMutableArray new];
+    
+    ContactCollectionView *contactCollectionView = [ContactCollectionView contactCollectionViewWithFrame:self.bounds];
     contactCollectionView.contactDelegate = self;
     contactCollectionView.clipsToBounds = YES;
     contactCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -144,14 +147,9 @@ CGFloat const kAnimationSpeed = .25;
 
 - (void)reloadData
 {
-    self.contactCollectionView.selectedContacts = [[NSMutableArray alloc] init];
+    self.contactCollectionView.selectedContacts = [NSMutableArray new];
     
-    if ([self.datasource respondsToSelector:@selector(selectedContactModelsForContactPicker:)])
-    {
-        [self.contactCollectionView.selectedContacts addObjectsFromArray:[self.datasource selectedContactModelsForContactPicker:self]];
-    }
-    
-    self.contacts = [self.datasource contactModelsForContactPicker:self];
+    self.contacts = [ContactManager getContacts];
     
     [self.contactCollectionView reloadData];
     [self.contactCollectionView performBatchUpdates:^{
@@ -232,23 +230,12 @@ CGFloat const kAnimationSpeed = .25;
                                       reuseIdentifier:@"Cell"];
     }
 
-    id<MBContactPickerModelProtocol> model = (id<MBContactPickerModelProtocol>)self.filteredContacts[indexPath.row];
+    Contact* contact = (Contact*)self.filteredContacts[indexPath.row];
 
-    cell.textLabel.text = model.contactTitle;
+    cell.textLabel.text = [contact getFullName];
 
-    cell.detailTextLabel.text = nil;
+    cell.detailTextLabel.text = contact.email;
     cell.imageView.image = nil;
-    
-    if ([model respondsToSelector:@selector(contactSubtitle)])
-    {
-        cell.detailTextLabel.text = model.contactSubtitle;
-    }
-    
-    if ([model respondsToSelector:@selector(contactImage)])
-    {
-        cell.imageView.image = model.contactImage;
-    }
-    
     return cell;
 }
 
@@ -256,17 +243,17 @@ CGFloat const kAnimationSpeed = .25;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id<MBContactPickerModelProtocol> model = self.filteredContacts[indexPath.row];
+    Contact* contact = self.filteredContacts[indexPath.row];
     
     [self hideSearchTableView];
-    [self.contactCollectionView addToSelectedContacts:model withCompletion:^{
+    [self.contactCollectionView addToSelectedContacts:contact withCompletion:^{
         [self becomeFirstResponder];
     }];
 }
 
 #pragma mark - ContactCollectionViewDelegate
 
-- (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView willChangeContentSizeTo:(CGSize)newSize
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView willChangeContentSizeTo:(CGSize)newSize
 {
     if (!CGSizeEqualToSize(self.contactCollectionViewContentSize, newSize))
     {
@@ -280,7 +267,7 @@ CGFloat const kAnimationSpeed = .25;
     }
 }
 
-- (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView entryTextDidChange:(NSString*)text
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView entryTextDidChange:(NSString*)text
 {
     [self.contactCollectionView.collectionViewLayout invalidateLayout];
 
@@ -301,36 +288,36 @@ CGFloat const kAnimationSpeed = .25;
         NSString *searchString = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSPredicate *predicate;
         if (self.allowsCompletionOfSelectedContacts) {
-            predicate = [NSPredicate predicateWithFormat:@"contactTitle contains[cd] %@", searchString];
+            predicate = [NSPredicate predicateWithFormat:@"firstName contains[cd] %@", searchString];
         } else {
-            predicate = [NSPredicate predicateWithFormat:@"contactTitle contains[cd] %@ && !SELF IN %@", searchString, self.contactCollectionView.selectedContacts];
+            predicate = [NSPredicate predicateWithFormat:@"firstName contains[cd] %@ && !SELF IN %@", searchString, self.contactCollectionView.selectedContacts];
         }
         self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
         [self.searchTableView reloadData];
     }
 }
 
-- (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didRemoveContact:(id<MBContactPickerModelProtocol>)model
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView didRemoveContact:(Contact*)aContact
 {
     if ([self.delegate respondsToSelector:@selector(contactCollectionView:didRemoveContact:)])
     {
-        [self.delegate contactCollectionView:contactCollectionView didRemoveContact:model];
+        [self.delegate contactCollectionView:contactCollectionView didRemoveContact:aContact];
     }
 }
 
-- (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didAddContact:(id<MBContactPickerModelProtocol>)model
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView didAddContact:(Contact*)aContact
 {
     if ([self.delegate respondsToSelector:@selector(contactCollectionView:didAddContact:)])
     {
-        [self.delegate contactCollectionView:contactCollectionView didAddContact:model];
+        [self.delegate contactCollectionView:contactCollectionView didAddContact:aContact];
     }
 }
 
-- (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didSelectContact:(id<MBContactPickerModelProtocol>)model
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView didSelectContact:(Contact*)aContact
 {
     if ([self.delegate respondsToSelector:@selector(contactCollectionView:didSelectContact:)])
     {
-        [self.delegate contactCollectionView:contactCollectionView didSelectContact:model];
+        [self.delegate contactCollectionView:contactCollectionView didSelectContact:aContact];
     }
 }
 

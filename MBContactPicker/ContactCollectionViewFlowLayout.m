@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Citrrus, LLC. All rights reserved.
 //
 
-#import "MBContactCollectionViewFlowLayout.h"
+#import "ContactCollectionViewFlowLayout.h"
 
-@interface MBContactCollectionViewFlowLayout()
+@interface ContactCollectionViewFlowLayout()
 
 @end
 
 // This is using the answer provided in the stack overflow post: http://bit.ly/INr0ie
 
-@implementation MBContactCollectionViewFlowLayout
+@implementation ContactCollectionViewFlowLayout
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {

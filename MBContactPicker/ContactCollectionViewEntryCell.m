@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Citrrus, LLC. All rights reserved.
 //
 
-#import "MBContactCollectionViewEntryCell.h"
+#import "ContactCollectionViewEntryCell.h"
 
-@interface MBContactCollectionViewEntryCell()
+@interface ContactCollectionViewEntryCell()
 
 @property (nonatomic, weak) UITextField *contactEntryTextField;
 
 @end
 
-@implementation MBContactCollectionViewEntryCell
+@implementation ContactCollectionViewEntryCell
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
