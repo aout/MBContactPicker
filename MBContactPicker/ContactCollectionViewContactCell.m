@@ -76,7 +76,7 @@
 - (CGFloat)widthForCellWithContact:(Contact*)aContact
 {
     UIFont *font = self.contactTitleLabel.font;
-    CGSize size = [[self.contact getFullName] boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{ NSFontAttributeName: font } context:nil].size;
+    CGSize size = [[aContact getFullName] boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{ NSFontAttributeName: font } context:nil].size;
     return ceilf(size.width) + 10;
 }
 

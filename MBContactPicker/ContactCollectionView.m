@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     ContactCollectionViewFlowLayout *layout = (ContactCollectionViewFlowLayout*)self.collectionViewLayout;
     layout.minimumInteritemSpacing = 5;
     layout.minimumLineSpacing = 1;
-    layout.sectionInset = UIEdgeInsetsMake(0, 10, 0, 10);
+    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 10);
     
     self.prototypeCell = [[ContactCollectionViewContactCell alloc] init];
     
@@ -475,8 +475,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     }
     else if ([self isEntryCell:indexPath])
     {
-        ContactCollectionViewEntryCell *cell = (ContactCollectionViewEntryCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ContactEntryCell"
-                                                                                                                           forIndexPath:indexPath];
+        ContactCollectionViewEntryCell *cell = (ContactCollectionViewEntryCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ContactEntryCell" forIndexPath:indexPath];
         
         cell.delegate = self;
         collectionCell = cell;
@@ -492,7 +491,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     else
     {
         ContactCollectionViewContactCell *cell = (ContactCollectionViewContactCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCell" forIndexPath:indexPath];
-        cell.contact = self.selectedContacts[[self selectedContactIndexFromIndexPath:indexPath]];
+        [cell configureForContact:self.selectedContacts[[self selectedContactIndexFromIndexPath:indexPath]]];
         if ([self.indexPathOfSelectedCell isEqual:indexPath])
         {
             cell.focused = YES;

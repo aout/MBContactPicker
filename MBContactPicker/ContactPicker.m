@@ -287,10 +287,17 @@ CGFloat const kAnimationSpeed = .25;
         [self showSearchTableView];
         NSString *searchString = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSPredicate *predicate;
+        
+        NSPredicate* fullNamePredicate = [NSPredicate predicateWithFormat:@"fullName contains[cd] %@", searchString];
+        NSPredicate* emailPredicate = [NSPredicate predicateWithFormat:@"email contains[cd] %@", searchString];
+        NSPredicate* notSelectedPredicate = [NSPredicate predicateWithFormat:@"!SELF IN %@", self.contactCollectionView.selectedContacts];
+        
+        NSPredicate* containPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:@[fullNamePredicate, emailPredicate]];
+        
         if (self.allowsCompletionOfSelectedContacts) {
-            predicate = [NSPredicate predicateWithFormat:@"firstName contains[cd] %@", searchString];
+            predicate = containPredicate;
         } else {
-            predicate = [NSPredicate predicateWithFormat:@"firstName contains[cd] %@ && !SELF IN %@", searchString, self.contactCollectionView.selectedContacts];
+            predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[containPredicate, notSelectedPredicate]];
         }
         self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
         [self.searchTableView reloadData];
