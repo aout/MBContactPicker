@@ -15,7 +15,7 @@ NSInteger const kCellHeight = 31;
 NSString * const kPrompt = @"To:";
 NSString * const kDefaultEntryText = @" ";
 
-@interface ContactCollectionView() <UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegateImproved, MBContactCollectionViewDelegateFlowLayout, UIKeyInput>
+@interface ContactCollectionView() <UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegateImproved, ContactCollectionViewDelegateFlowLayout, UIKeyInput>
 
 @property (nonatomic, readonly) NSIndexPath *indexPathOfSelectedCell;
 @property (nonatomic) ContactCollectionViewContactCell *prototypeCell;
@@ -35,7 +35,9 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 
 + (ContactCollectionView*)contactCollectionViewWithFrame:(CGRect)frame
 {
-    ContactCollectionViewFlowLayout *layout = [[ContactCollectionViewFlowLayout alloc] init];
+    UICollectionViewFlowLayout *layout = [[ContactCollectionViewFlowLayout alloc] init];
+//    [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+//    layout.minimumInteritemSpacing = 2.0f;
     return [[self alloc] initWithFrame:frame collectionViewLayout:layout];
 }
 

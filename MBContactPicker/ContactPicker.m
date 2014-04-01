@@ -8,7 +8,7 @@
 
 #import "ContactPicker.h"
 
-CGFloat const kMaxVisibleRows = 2;
+CGFloat const kMaxVisibleRows = 100;
 NSString * const kMBPrompt = @"To:";
 CGFloat const kAnimationSpeed = .25;
 
