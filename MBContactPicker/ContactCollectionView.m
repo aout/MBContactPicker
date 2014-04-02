@@ -550,6 +550,11 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    self.searchText = textField.text;
+    if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:entryTextDidChange:)])
+    {
+        [self.contactDelegate contactCollectionView:self entryTextDidPressDone:textField.text];
+    }
     return NO;
 }
 

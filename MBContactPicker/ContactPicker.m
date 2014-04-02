@@ -7,6 +7,7 @@
 //
 
 #import "ContactPicker.h"
+#import "NSString+Mail.h"
 
 CGFloat const kMaxVisibleRows = 100;
 NSString * const kMBPrompt = @"To:";
@@ -93,7 +94,7 @@ CGFloat const kAnimationSpeed = .25;
     contactCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:contactCollectionView];
     self.contactCollectionView = contactCollectionView;
-
+    
     UITableView *searchTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, 0)];
     searchTableView.dataSource = self;
     searchTableView.delegate = self;
@@ -110,7 +111,7 @@ CGFloat const kAnimationSpeed = .25;
                                                                  options:0
                                                                  metrics:nil
                                                                    views:NSDictionaryOfVariableBindings(contactCollectionView, searchTableView)]];
-
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contactCollectionView]-(0@500)-|"
                                                                  options:0
                                                                  metrics:nil
@@ -229,11 +230,11 @@ CGFloat const kAnimationSpeed = .25;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                       reuseIdentifier:@"Cell"];
     }
-
+    
     Contact* contact = (Contact*)self.filteredContacts[indexPath.row];
-
+    
     cell.textLabel.text = [contact getFullName];
-
+    
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = nil;
     return cell;
@@ -270,11 +271,10 @@ CGFloat const kAnimationSpeed = .25;
 - (void)contactCollectionView:(ContactCollectionView*)contactCollectionView entryTextDidChange:(NSString*)text
 {
     [self.contactCollectionView.collectionViewLayout invalidateLayout];
-
+    
     [self.contactCollectionView performBatchUpdates:^{
         [self layoutIfNeeded];
-    }
-    completion:^(BOOL finished) {
+    } completion:^(BOOL finished) {
         [self.contactCollectionView setFocusOnEntry];
     }];
     
@@ -301,6 +301,24 @@ CGFloat const kAnimationSpeed = .25;
         }
         self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
         [self.searchTableView reloadData];
+    }
+}
+
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView entryTextDidPressDone:(NSString*)text
+{
+    NSString* potentialMailAdress = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if ([potentialMailAdress isAnEmailAdress]) {
+        // Create a contact and add it
+        Contact* contact = [ContactManager getContactWithName:@"" andMail:potentialMailAdress orCreateOne:YES];
+        [self.contactCollectionView addToSelectedContacts:contact withCompletion:^{
+            [self.contactCollectionView.collectionViewLayout invalidateLayout];
+            [self.contactCollectionView performBatchUpdates:^{
+                [self layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                [self hideSearchTableView];
+                [self.contactCollectionView setFocusOnEntry];
+            }];
+        }];
     }
 }
 
@@ -401,7 +419,7 @@ CGFloat const kAnimationSpeed = .25;
             }
         }
     }
-
+    
 }
 
 @end

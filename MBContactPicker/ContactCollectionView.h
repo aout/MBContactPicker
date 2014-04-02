@@ -20,6 +20,7 @@
 
 - (void)contactCollectionView:(ContactCollectionView*)contactCollectionView willChangeContentSizeTo:(CGSize)newSize;
 - (void)contactCollectionView:(ContactCollectionView*)contactCollectionView entryTextDidChange:(NSString*)text;
+- (void)contactCollectionView:(ContactCollectionView*)contactCollectionView entryTextDidPressDone:(NSString*)text;
 - (void)contactCollectionView:(ContactCollectionView*)contactCollectionView didSelectContact:(Contact*)aContact;
 - (void)contactCollectionView:(ContactCollectionView*)contactCollectionView didAddContact:(Contact*)aContact;
 - (void)contactCollectionView:(ContactCollectionView*)contactCollectionView didRemoveContact:(Contact*)aContact;

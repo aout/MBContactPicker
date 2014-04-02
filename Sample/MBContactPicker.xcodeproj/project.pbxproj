@@ -11,6 +11,7 @@
 		182802B518DB323A00298584 /* ContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 182802B318DB323A00298584 /* ContactManager.m */; };
 		182802B918DB325800298584 /* NSDictionary+DictionaryWithABRecordRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 182802B818DB325800298584 /* NSDictionary+DictionaryWithABRecordRef.m */; };
 		182802BD18DB328D00298584 /* NSString+NSString_ContainsString.m in Sources */ = {isa = PBXBuildFile; fileRef = 182802BC18DB328D00298584 /* NSString+NSString_ContainsString.m */; };
+		18A2C38118EC52E5009F90D0 /* NSString+Mail.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A2C38018EC52E5009F90D0 /* NSString+Mail.m */; };
 		632577DC185181B600211E57 /* ContactCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 632577CE185181B600211E57 /* ContactCollectionView.m */; };
 		632577DD185181B600211E57 /* ContactCollectionViewContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 632577D0185181B600211E57 /* ContactCollectionViewContactCell.m */; };
 		632577DF185181B600211E57 /* ContactCollectionViewPromptCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 632577D4185181B600211E57 /* ContactCollectionViewPromptCell.m */; };
@@ -52,6 +53,8 @@
 		182802B818DB325800298584 /* NSDictionary+DictionaryWithABRecordRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DictionaryWithABRecordRef.m"; sourceTree = "<group>"; };
 		182802BB18DB328D00298584 /* NSString+NSString_ContainsString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSString_ContainsString.h"; sourceTree = "<group>"; };
 		182802BC18DB328D00298584 /* NSString+NSString_ContainsString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSString_ContainsString.m"; sourceTree = "<group>"; };
+		18A2C37F18EC52E5009F90D0 /* NSString+Mail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Mail.h"; sourceTree = "<group>"; };
+		18A2C38018EC52E5009F90D0 /* NSString+Mail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Mail.m"; sourceTree = "<group>"; };
 		632577CD185181B600211E57 /* ContactCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactCollectionView.h; sourceTree = "<group>"; };
 		632577CE185181B600211E57 /* ContactCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionView.m; sourceTree = "<group>"; };
 		632577CF185181B600211E57 /* ContactCollectionViewContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactCollectionViewContactCell.h; sourceTree = "<group>"; };
@@ -141,6 +144,16 @@
 			path = "../../NSString-ContainsString";
 			sourceTree = "<group>";
 		};
+		18A2C37E18EC52E5009F90D0 /* NSString-Mail */ = {
+			isa = PBXGroup;
+			children = (
+				18A2C37F18EC52E5009F90D0 /* NSString+Mail.h */,
+				18A2C38018EC52E5009F90D0 /* NSString+Mail.m */,
+			);
+			name = "NSString-Mail";
+			path = "../../NSString-Mail";
+			sourceTree = "<group>";
+		};
 		632577CC185181B600211E57 /* MBContactPicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				182802BA18DB328D00298584 /* NSString-ContainsString */,
+				18A2C37E18EC52E5009F90D0 /* NSString-Mail */,
 				182802B618DB325800298584 /* NSDictionary-DictionaryWithABRecordRef */,
 				182802AF18DB323A00298584 /* ContactManager */,
 				632577CC185181B600211E57 /* MBContactPicker */,
@@ -347,6 +361,7 @@
 				632577DF185181B600211E57 /* ContactCollectionViewPromptCell.m in Sources */,
 				63B41D42183DA31100C4321B /* main.m in Sources */,
 				182802B518DB323A00298584 /* ContactManager.m in Sources */,
+				18A2C38118EC52E5009F90D0 /* NSString+Mail.m in Sources */,
 				632577E2185181B600211E57 /* ContactCollectionViewFlowLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
